@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Baseball Cards</title>
+</head>
+<body>
+    <h1>Add a Baseball Card</h1>
+    <form id="cardForm">
+        <input type="text" id="name" placeholder="Name" required>
+        <input type="text" id="team" placeholder="Team" required>
+        <input type="number" id="year" placeholder="Year" required>
+        <input type="text" id="condition" placeholder="Condition" required>
+        <input type="number" id="value" placeholder="Value" required>
+        <input type="text" id="image_url" placeholder="Image URL" required>
+        <button type="submit">Add Card</button>
+    </form>
+
+    <h1>All Baseball Cards</h1>
+    <div id="cards"></div>
+
+    <script>
+        document.getElementById('cardForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const card = {
+                name: document.getElementById('name').value,
+                team: document.getElementById('team').value,
+                year: document.getElementById('year').value,
+                condition: document.getElementById('condition').value,
+                value: document.getElementById('value').value,
+                image_url: document.getElementById('image_url').value
+            };
+            fetch('/add_card', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(card)
+            }).then(response => response.json()).then(data => {
+                alert(data.status);
+                loadCards();
+            });
+        });
+
+        function loadCards() {
+            fetch('/cards').then(response => response.json()).then(cards => {
+                const cardsDiv = document.getElementById('cards');
+                cardsDiv.innerHTML = '';
+                cards.forEach(card => {
+                    const cardDiv = document.createElement('div');
+                    cardDiv.innerHTML = `<h2>${card[1]}</h2><p>Team: ${card[2]}</p><p>Year: ${card[3]}</p><p>Condition: ${card[4]}</p><p>Value: ${card[5]}</p><img src="${card[6]}" alt="${card[1]}">`;
+                    cardsDiv.appendChild(cardDiv);
+                });
+            });
+        }
+
+        loadCards();
+    </script>
+</body>
+</html>
