@@ -1,59 +1,62 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Baseball Cards</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Baseball Card Collection</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
-<body>
-    <h1>Add a Baseball Card</h1>
-    <form id="cardForm">
-        <input type="text" id="name" placeholder="Name" required>
-        <input type="text" id="team" placeholder="Team" required>
-        <input type="number" id="year" placeholder="Year" required>
-        <input type="text" id="condition" placeholder="Condition" required>
-        <input type="number" id="value" placeholder="Value" required>
-        <input type="text" id="image_url" placeholder="Image URL" required>
-        <button type="submit">Add Card</button>
-    </form>
+<body onload="checkLoginStatus()">
+    <!-- Navigation bar -->
+    <nav>
+        <a href="#addCard">Add Card</a>
+        <a href="#viewCards">View Cards</a>
 
-    <h1>All Baseball Cards</h1>
-    <div id="cards"></div>
+        <!-- Profile Icon with Dropdown -->
+     <!-- Profile Icon with Dropdown -->
+<div class="profile">
+    <img src="profile_icon.jpg" alt="Profile Icon" class="profile-icon" onclick="toggleDropdown()">
+    <div id="dropdownMenu" class="dropdown-content">
+        <span id="cardCount">Cards: 0</span>
+        <button onclick="logOut()">Log Out</button>
+    </div>
+</div>
 
-    <script>
-        document.getElementById('cardForm').addEventListener('submit', function(event) {
-            event.preventDefault();
-            const card = {
-                name: document.getElementById('name').value,
-                team: document.getElementById('team').value,
-                year: document.getElementById('year').value,
-                condition: document.getElementById('condition').value,
-                value: document.getElementById('value').value,
-                image_url: document.getElementById('image_url').value
-            };
-            fetch('/add_card', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(card)
-            }).then(response => response.json()).then(data => {
-                alert(data.status);
-                loadCards();
-            });
-        });
+    </nav>
 
-        function loadCards() {
-            fetch('/cards').then(response => response.json()).then(cards => {
-                const cardsDiv = document.getElementById('cards');
-                cardsDiv.innerHTML = '';
-                cards.forEach(card => {
-                    const cardDiv = document.createElement('div');
-                    cardDiv.innerHTML = `<h2>${card[1]}</h2><p>Team: ${card[2]}</p><p>Year: ${card[3]}</p><p>Condition: ${card[4]}</p><p>Value: ${card[5]}</p><img src="${card[6]}" alt="${card[1]}">`;
-                    cardsDiv.appendChild(cardDiv);
-                });
-            });
-        }
+    <!-- Add Card Section -->
+    <section id="addCard">
+        <h2>Add a New Baseball Card</h2>
+        <form id="cardForm">
+            <label for="playerName">Player Name:</label>
+            <input type="text" id="playerName" required>
+            
+            <label for="team">Team:</label>
+            <input type="text" id="team">
+            
+            <label for="year">Year:</label>
+            <input type="text" id="year">
+            
+            <label for="condition">Condition:</label>
+            <input type="text" id="condition">
 
-        loadCards();
-    </script>
+            <label for="cardNumber">Card Number:</label>
+            <input type="text" id="cardNumber">
+
+            <label for="cardBrand">Card Brand:</label>
+            <input type="text" id="cardBrand">
+            
+            <button type="button" onclick="addCard()">Add Card</button>
+        </form>
+    </section>
+
+    <!-- View Cards Section -->
+    <section id="viewCards">
+        <h2>Your Baseball Card Collection</h2>
+        <ul id="cardsList"></ul>
+    </section>
+
+    <script src="script.js"></script>
 </body>
 </html>
+
